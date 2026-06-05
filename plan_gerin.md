@@ -1,372 +1,435 @@
-hi5
 
-# Student Problem Marketplace
+Frontend (Next.js)
+│
+├── AI Matching Dashboard
+├── GitHub Analytics UI
+├── Mentor Marketplace
+├── Mentor Booking System
+└── Recommendation Panels
 
-## Project Overview
+Backend (FastAPI)
+│
+├── AI Recommendation Engine
+├── GitHub Integration Service
+├── Mentor Service
+├── Matching Algorithms
+└── Analytics Engine
 
-Student Problem Marketplace is an AI-powered collaboration platform designed to help students transform ideas into successful projects by connecting them with teammates, mentors, hackathons, and opportunities. The platform acts as a combination of LinkedIn, GitHub, and a hackathon ecosystem, providing a centralized space for students to build innovative solutions together.
+Database (PostgreSQL)
+│
+├── github_profiles
+├── mentor_profiles
+├── mentorship_sessions
+├── recommendations
+└── skill_scores
+
+# Student Problem Marketplace — Phase 2 Development Plan
+
+## Phase 2 Goals
+
+### Main Objective
+Enhance the MVP by introducing:
+- GitHub Integration
+- AI Team Matching
+- Mentor Marketplace
+
+### Expected Outcome
+Create an intelligent collaboration ecosystem that helps students:
+- Find suitable teammates
+- Build credibility using GitHub
+- Connect with mentors
+- Improve project success rates
 
 ---
 
-## Problem Statement
-
-Many students have innovative project ideas but struggle to find the right teammates, mentors, and resources to bring their ideas to life. Existing platforms focus only on networking, code hosting, or hackathons separately, creating a fragmented experience.
-
-The Student Problem Marketplace solves this challenge by providing a single platform where students can:
-
-* Share project ideas
-* Find compatible teammates
-* Connect with mentors
-* Discover hackathons
-* Showcase their skills and achievements
-
----
+# 1. GitHub Integration Module
 
 ## Objectives
+- Connect GitHub accounts
+- Analyze coding activity
+- Improve AI matching quality
 
-### Primary Objectives
+## Features
+### GitHub OAuth Login
+- Secure GitHub authentication
+- Link GitHub account to student profile
 
-* Help students build strong project teams.
-* Encourage collaboration across colleges and domains.
-* Improve access to mentorship.
-* Increase participation in hackathons and innovation challenges.
-* Create a portfolio-building ecosystem for students.
+### Fetch GitHub Data
+Store:
+- Public repositories
+- Languages used
+- Contribution activity
+- Followers/following
+- Stars earned
+- Open-source activity
 
-### Secondary Objectives
-
-* Provide AI-powered recommendations.
-* Enable skill-based team formation.
-* Create a community-driven learning environment.
-* Help recruiters discover talented students.
-
----
-
-## Target Users
-
-### Students
-
-* Project creators
-* Developers
-* Designers
-* Data scientists
-* Beginners seeking experience
-
-### Mentors
-
-* Industry professionals
-* Professors
-* Senior students
-* Startup founders
-
-### Recruiters (Future Scope)
-
-* Companies
-* Startup founders
-* HR professionals
+### GitHub Analytics Dashboard
+Display:
+- Most used languages
+- Contribution heatmap
+- Repository statistics
+- Coding consistency score
+- Open-source score
 
 ---
 
-## Core Features
+## Backend APIs
 
-### 1. User Authentication
+python POST /github/connect GET  /github/profile/{username} GET  /github/repos/{username} GET  /github/stats/{username} 
 
-* Email and password login
-* Google authentication
-* Profile creation
-* Role selection (Student/Mentor)
+---
 
-### 2. Student Profile System
+## Database Table: github_profiles
 
-Each user profile includes:
+| Column | Type |
+|---|---|
+| id | UUID |
+| user_id | UUID |
+| github_username | VARCHAR |
+| followers | INT |
+| following | INT |
+| public_repos | INT |
+| total_stars | INT |
+| top_languages | JSON |
+| contribution_score | FLOAT |
 
-* Name
-* College
-* Degree
-* Skills
-* Interests
-* Experience
-* GitHub profile
-* LinkedIn profile
-* Portfolio links
+---
 
-### 3. GitHub Integration
+## GitHub Scoring Formula
 
-Automatically fetch:
+python github_score = (     commits * 0.4 +     stars * 0.2 +     repos * 0.2 +     consistency * 0.2 ) 
 
-* Repositories
-* Programming languages
-* Contribution history
-* GitHub statistics
-* Open-source activity
+---
 
-### 4. Project Marketplace
+# 2. AI Team Matching System
 
-Students can post:
+## Objective
+Automatically recommend the best teammates for projects.
 
-* Project title
-* Description
-* Required skills
-* Team size
-* Duration
-* Difficulty level
-* Technology stack
+---
 
+## Matching Parameters
+
+### Skill Match
+Compare:
+- Required project skills
+- User skills
+
+### Interest Match
+Compare domains such as:
+- AI/ML
+- Web Development
+- Blockchain
+- Cybersecurity
+- Data Science
+
+### Experience Match
+Levels:
+- Beginner
+- Intermediate
+- Advanced
+
+### GitHub Activity Match
+Analyze:
+- Tech stack similarity
+- Relevant repositories
+- Coding activity
+
+### Collaboration Score
+Evaluate:
+- Completed projects
+- Leadership history
+- Team participation
+- Reviews/ratings
+
+---
+
+## AI Matching Workflow
+
+text Project Created       ↓ Extract Required Skills       ↓ Analyze Candidate Profiles       ↓ Calculate Compatibility Score       ↓ Rank Candidates       ↓ Recommend Top Matches 
+
+---
+
+## Compatibility Formula
+
+python compatibility_score = (     skill_match * 0.4 +     github_score * 0.2 +     interest_match * 0.15 +     experience_match * 0.15 +     collaboration_score * 0.1 ) 
+
+---
+
+## AI Services
+
+### Use:
+- OpenAI API
+- LangChain
+- Embeddings
+- Vector Search
+
+### AI Tasks
+- Skill extraction
+- Domain classification
+- User similarity analysis
+- Recommendation summaries
+
+---
+
+## Example Recommendation Response
+
+json {   "recommended_user": "Rahul",   "score": 92,   "reason": [     "Strong React skills",     "Active GitHub contributor",     "Interested in AI projects"   ] } 
+
+---
+
+## Backend APIs
+
+python POST /ai/match-team GET  /ai/recommendations/{project_id} GET  /ai/similar-users/{user_id} 
+
+---
+
+## Database Table: recommendations
+
+| Column | Type |
+|---|---|
+| id | UUID |
+| project_id | UUID |
+| recommended_user_id | UUID |
+| compatibility_score | FLOAT |
+| recommendation_reason | JSON |
+
+---
+
+# 3. Mentor Marketplace
+
+## Objective
+Enable students to connect with mentors for guidance.
+
+---
+
+## Mentor Features
+
+### Mentor Profiles
+Mentors can add:
+- Expertise
+- Industry experience
+- Availability
+- LinkedIn profile
+- Session types
+
+### Mentor Discovery
+Students can filter by:
+- Domain
+- Experience
+- Availability
+- Ratings
+
+### Mentorship Requests
 Students can:
+- Request mentorship
+- Schedule sessions
+- Request project reviews
 
-* Browse projects
-* Apply to join projects
-* Save projects
-* Contact project owners
+### Session Types
+- 1:1 Guidance
+- Resume Review
+- Architecture Review
+- Hackathon Preparation
+- Startup Mentoring
 
-### 5. AI Team Matching
+---
 
-The system recommends teammates based on:
-
-* Skills
-* Interests
-* Experience
-* GitHub activity
-* Previous project history
-
-### 6. Mentor Marketplace
+## Mentor Dashboard
 
 Mentors can:
-
-* Create mentor profiles
-* Specify expertise
-* Offer guidance
-* Conduct project reviews
-* Schedule mentorship sessions
-
-### 7. Team Workspace
-
-Each project receives:
-
-* Team chat
-* Task management
-* Shared resources
-* Meeting scheduling
-* Progress tracking
-
-### 8. Hackathon Finder
-
-Students can:
-
-* Discover hackathons
-* Filter by domain
-* Track deadlines
-* Form teams
-* Register directly
-
-### 9. Portfolio Builder
-
-Automatically generate:
-
-* Project portfolio
-* Team contributions
-* Achievement badges
-* Participation certificates
-
-### 10. Notifications System
-
-Notify users about:
-
-* Team invitations
-* Project applications
-* Mentor responses
-* Hackathon deadlines
-* Task updates
+- Accept/reject requests
+- Manage sessions
+- View student projects
+- Provide feedback
 
 ---
 
-## Innovative Features
+## Backend APIs
 
-### AI Co-Founder Score
-
-Measures:
-
-* Technical skills
-* Teamwork
-* Leadership
-* Project completion rate
-
-### Project Success Prediction
-
-AI predicts:
-
-* Completion probability
-* Missing skills
-* Potential risks
-
-### Smart Skill Gap Analysis
-
-Suggests:
-
-* Skills to learn
-* Recommended courses
-* Improvement roadmap
-
-### Startup Potential Score
-
-Analyzes projects and estimates:
-
-* Innovation level
-* Market demand
-* Startup viability
-
-### AI Resume Generator
-
-Generates resumes automatically from:
-
-* Projects
-* Skills
-* Contributions
+python POST /mentor/create-profile GET  /mentor/list POST /mentor/request GET  /mentor/sessions 
 
 ---
 
-## Technology Stack
+## Database Table: mentor_profiles
 
-### Frontend
-
-* Next.js
-* React
-* TypeScript
-* Tailwind CSS
-* Shadcn UI
-
-### Backend
-
-* FastAPI
-* Python
-
-### Database
-
-* PostgreSQL
-
-### Authentication
-
-* Clerk/Auth.js
-
-### AI Services
-
-* OpenAI API
-* LangChain
-
-### Real-Time Features
-
-* Socket.IO
-* WebSockets
-
-### Cloud
-
-* Vercel
-* Render
-* AWS (Future)
+| Column | Type |
+|---|---|
+| id | UUID |
+| user_id | UUID |
+| expertise | JSON |
+| years_experience | INT |
+| availability | JSON |
+| rating | FLOAT |
 
 ---
 
-## Database Modules
+## Database Table: mentorship_sessions
 
-### Users
-
-Stores:
-
-* User information
-* Skills
-* Interests
-* Social links
-
-### Projects
-
-Stores:
-
-* Project details
-* Team requirements
-* Status
-
-### Teams
-
-Stores:
-
-* Team members
-* Roles
-* Contributions
-
-### Mentors
-
-Stores:
-
-* Mentor profiles
-* Expertise
-* Availability
-
-### Hackathons
-
-Stores:
-
-* Event details
-* Deadlines
-* Registration links
+| Column | Type |
+|---|---|
+| id | UUID |
+| mentor_id | UUID |
+| student_id | UUID |
+| project_id | UUID |
+| session_time | TIMESTAMP |
+| status | VARCHAR |
 
 ---
 
-## Development Roadmap
+# Frontend Development
 
-### Phase 1 (MVP)
+## New Pages
 
-* Authentication
-* User profiles
-* Project posting
-* Project search
-* Team applications
-
-### Phase 2
-
-* AI team matching
-* GitHub integration
-* Mentor marketplace
-
-### Phase 3
-
-* Team workspace
-* Chat system
-* Task management
-
-### Phase 4
-
-* Hackathon finder
-* Portfolio builder
-* Achievement badges
-
-### Phase 5
-
-* Startup score
-* Recruiter dashboard
-* Mobile application
+text /dashboard/ai-match /dashboard/github /dashboard/mentors /dashboard/mentor/[id] /dashboard/recommendations 
 
 ---
 
-## Expected Outcomes
+## Required UI Components
 
-* Improved student collaboration.
-* Increased project completion rates.
-* Better mentorship accessibility.
-* Stronger student portfolios.
-* Enhanced innovation and entrepreneurship among students.
+### AI Components
+- Match score cards
+- Compatibility charts
+- Recommendation cards
 
----
+### GitHub Components
+- Contribution heatmap
+- Language charts
+- Repository cards
 
-## Future Scope
-
-* Mobile application
-* Internship marketplace
-* Startup incubation platform
-* AI project reviewer
-* Recruiter hiring portal
-* Global student collaboration network
+### Mentor Components
+- Mentor cards
+- Booking modal
+- Session calendar
 
 ---
 
-## Conclusion
+## Recommended Frontend Stack
+- Next.js
+- TypeScript
+- Tailwind CSS
+- Shadcn UI
+- Framer Motion
+- React Query
+- Zustand
 
-Student Problem Marketplace aims to become the ultimate collaboration platform for students by combining networking, project management, mentorship, hackathons, and AI-powered team formation into a single ecosystem. The platform enables students to convert ideas into real-world solutions while building valuable skills, connections, and professional portfolios.
+---
+
+
+
+# Database Additions
+
+## New Tables
+
+text github_profiles recommendations mentor_profiles mentorship_sessions user_skill_scores project_skill_requirements 
+
+---
+
+# AI Infrastructure
+
+## Recommended Services
+
+| Purpose | Tool |
+|---|---|
+| AI Chat | OpenAI API |
+| Workflow | LangChain |
+| Embeddings | OpenAI Embeddings |
+| Vector Database | pgvector / Pinecone |
+| Recommendation Engine | Custom Python Logic |
+
+---
+
+# AI Recommendation Pipeline
+
+text User Profile    ↓ Generate Skill Embeddings    ↓ Store in Vector DB    ↓ Compare With Project Embeddings    ↓ Return Similar Users 
+
+---
+
+# Security & Performance
+
+## GitHub API Protection
+- OAuth token management
+- API caching
+- Rate limit handling
+
+## AI Protection
+- Prompt validation
+- Abuse prevention
+- Request throttling
+
+---
+
+# Phase 2 Development Timeline
+
+## Week 1 — Backend Setup
+- GitHub OAuth
+- GitHub APIs
+- Mentor schema
+- Recommendation schema
+
+## Week 2 — GitHub Analytics
+- Repository parsing
+- Contribution tracking
+- Language analytics
+
+## Week 3 — AI Matching Engine
+- Skill extraction
+- Compatibility scoring
+- Recommendation APIs
+
+## Week 4 — Mentor Marketplace
+- Mentor profiles
+- Booking system
+- Session management
+
+## Week 5 — Frontend Integration
+- AI dashboard
+- GitHub profile UI
+- Mentor pages
+
+## Week 6 — Testing & Deployment
+- Performance optimization
+- AI tuning
+- Bug fixes
+- Deployment
+
+---
+
+# Priority Order
+
+## High Priority
+1. GitHub Integration
+2. AI Team Matching
+3. Mentor Profiles
+
+## Medium Priority
+4. Recommendation explanations
+5. Mentor booking
+6. Skill analytics
+
+## Low Priority
+7. AI insights dashboard
+8. Advanced ranking algorithms
+
+---
+
+# Final Deliverables
+
+By the end of Phase 2, the platform should support:
+
+✅ GitHub-integrated student profiles  
+✅ AI-powered teammate recommendations  
+✅ Mentor discovery and booking  
+✅ Recommendation engine  
+✅ Skill analytics  
+✅ Intelligent collaboration ecosystem
+
+---
+
+# Future Enhancements After Phase 2
+- AI Project Success Prediction
+- Resume Builder
+- Hackathon Auto-Team Formation
+- Recruiter Dashboard
+- Startup Potential Analysis
+- Funding Recommendations
