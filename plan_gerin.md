@@ -433,3 +433,17 @@ By the end of Phase 2, the platform should support:
 - Recruiter Dashboard
 - Startup Potential Analysis
 - Funding Recommendations
+
+database - supabase
+framework - react
+Frontend
+
+* React￼
+* TypeScript
+* Tailwind CSS
+* shadcn/ui
+
+Backend
+
+* Python +  FastAPI￼
+
